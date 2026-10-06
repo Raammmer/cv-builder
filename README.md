@@ -1,5 +1,5 @@
 # CVBuilder 📄🤖
-> **An Intelligent Flutter Resume Builder with an Integrated AI Career Agent (MVVM Architecture)**
+> **An Intelligent Flutter Resume Builder with an Integrated AI Career Agent**
 
 ---
 
