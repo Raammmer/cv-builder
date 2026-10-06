@@ -5,7 +5,7 @@
 
 ## 🌟 Overview
 
-**CVBuilder** is a high-performance cross-platform application developed in **Flutter** that strictly follows the **MVVM (Model-View-ViewModel)** architectural pattern. It solves a core challenge job-seekers face: transforming raw career milestones into ATS-optimized, high-impact resumes.
+**CVBuilder** is a high-performance cross-platform application developed in **Flutter**. It solves a core challenge job-seekers face: transforming raw career milestones into ATS-optimized, high-impact resumes.
 
 Unlike basic resume apps, **CVBuilder integrates an autonomous AI Career Agent**. The agent acts as an intelligent career copilot, using Google's **XYZ Formula** and semantic keyword analysis to evaluate, rewrite, and mutate resume data directly inside the application state.
 
