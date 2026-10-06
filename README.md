@@ -3,9 +3,9 @@
 
 ---
 
-## 🌟 Executive Summary (For Your Professor & Defense)
+## 🌟 Overview
 
-**CVBuilder** is an academic-grade cross-platform application developed in **Flutter** that strictly follows the **MVVM (Model-View-ViewModel)** architectural pattern. It solves a core challenge job-seekers face: transforming raw career milestones into ATS-optimized, high-impact resumes.
+**CVBuilder** is a high-performance cross-platform application developed in **Flutter** that strictly follows the **MVVM (Model-View-ViewModel)** architectural pattern. It solves a core challenge job-seekers face: transforming raw career milestones into ATS-optimized, high-impact resumes.
 
 Unlike basic resume apps, **CVBuilder integrates an autonomous AI Career Agent**. The agent acts as an intelligent career copilot, using Google's **XYZ Formula** and semantic keyword analysis to evaluate, rewrite, and mutate resume data directly inside the application state.
 
@@ -48,20 +48,20 @@ This project strictly adheres to the **MVVM Architecture** to ensure clean separ
 ### Layer Responsibilities
 
 1. **Model Layer (`lib/models/`)**:
-   - `CvData.dart`: Composite resume domain entity with completeness score algorithm.
+   - `cv_data.dart`: Composite resume domain entity with completeness score algorithm.
    - `work_experience.dart`, `education.dart`, `skill.dart`, `project.dart`, `certification.dart`: Structured career entities.
    - `ai_agent_message.dart`: Conversational messages, reasoning traces, and structured `AgentToolAction` payloads.
 
 2. **ViewModel Layer (`lib/viewmodels/`)**:
-   - `CvViewModel.dart`: Manages resume CRUD operations, template choices, active color palettes, and persistence orchestration via `StorageService`.
-   - `AiAgentViewModel.dart`: Manages AI conversational state, reasoning traces, ATS match analysis, and tool execution dispatching.
+   - `cv_viewmodel.dart`: Manages resume CRUD operations, template choices, active color palettes, and persistence orchestration via `StorageService`.
+   - `ai_agent_viewmodel.dart`: Manages AI conversational state, reasoning traces, ATS match analysis, and tool execution dispatching.
 
 3. **View Layer (`lib/views/` & `lib/widgets/`)**:
-   - `HomeScreen`: Dashboard with completeness gauges, recent resumes, and navigation.
-   - `CvEditorScreen`: Tabbed form editor with inline "AI Polish" hooks.
-   - `CvPreviewScreen`: Real-time interactive A4 sheet rendering and vector PDF export.
-   - `AiAgentScreen`: Dedicated AI career copilot chat and ATS job-matching suite.
-   - `SettingsScreen`: Gemini API key configuration and offline demo engine toggle.
+   - `home_screen.dart`: Dashboard with completeness gauges, recent resumes, and navigation.
+   - `cv_editor_screen.dart`: Tabbed form editor with inline "AI Polish" hooks.
+   - `cv_preview_screen.dart`: Real-time interactive A4 sheet rendering and vector PDF export.
+   - `ai_agent_screen.dart`: Dedicated AI career copilot chat and ATS job-matching suite.
+   - `settings_screen.dart`: Gemini API key configuration and offline demo engine toggle.
 
 ---
 
@@ -81,9 +81,9 @@ In Artificial Intelligence and Software Engineering, an **Agent** is defined by 
 | `add_skill` | Extracts demanded frameworks from job descriptions and appends them as categorized chips. | ATS scanner or conversational command. |
 | `analyze_ats` | Scans a target Job Description, computes match percentage (0–100%), and detects missing keywords. | ATS Job Matcher tab. |
 
-### 3. Dual Engine Architecture (Classroom & Presentation Ready)
-- **Live Mode**: Directly queries Google Gemini 1.5 Flash via REST API using standard HTTP headers and JSON structured mode.
-- **Offline / Simulated Mode**: Features an embedded autonomous rule engine that simulates multi-step reasoning traces (*"Step 1: Detected passive phrasing... Step 2: Applying XYZ metric framework..."*). **This ensures 100% reliability during academic presentations without requiring an internet connection or paid API keys.**
+### 3. Dual Engine Architecture (Cloud & Offline Resilient)
+- **Live Mode**: Directly queries Google Gemini via REST API using standard HTTP headers and JSON structured mode.
+- **Offline / Fallback Mode**: Features an embedded heuristic rule engine that executes local reasoning and XYZ formatting, ensuring uninterrupted productivity without requiring an active internet connection or external API availability.
 
 ---
 
@@ -132,9 +132,9 @@ cv_builder/
 │   │   ├── ai_agent_screen.dart       # AI Career Copilot chat & ATS Job Matcher
 │   │   └── settings_screen.dart       # API key configuration & engine toggles
 │   ├── services/                      # SERVICE LAYER: External I/O and hardware
-│   │   ├── ai_agent_service.dart      # Dual Gemini / Mock Agent engine
-│   │   ├── pdf_export_service.dart    # PDF generation for all 3 templates
-│   │   └── storage_service.dart       # SharedPreferences persistence
+│   │   ├── ai_agent_service.dart      # Dual Gemini / Local Agent engine
+│   │   ├── pdf_export_service.dart    # PDF generation for all templates
+│   │   └── storage_service.dart       # Local persistence
 │   ├── widgets/                       # Reusable UI widgets & Templates
 │   │   ├── ai_action_button.dart      # Reusable "AI Polish" widget with modal preview
 │   │   ├── score_badge.dart           # Circular score gauge
@@ -148,8 +148,7 @@ cv_builder/
 │   └── utils/
 │       ├── constants.dart             # Palettes, templates, and agent system prompts
 │       └── sample_data.dart           # Pre-configured Software Engineer profile
-└── test/
-    └── cv_builder_test.dart           # Unit tests for models & agent tool reasoning
+└── pubspec.yaml                       # Project dependencies and asset definitions
 ```
 
 ---
@@ -158,7 +157,7 @@ cv_builder/
 
 ### Prerequisites
 1. Install the [Flutter SDK](https://docs.flutter.dev/get-started/install) (version 3.10.0 or higher).
-2. Ensure you have an editor (VS Code, Android Studio, or Antigravity IDE) and an execution target (Windows Desktop, Chrome Browser, or Android Emulator).
+2. Ensure you have an editor (VS Code or Android Studio) and an execution target (Windows Desktop, Chrome Browser, or Android Emulator).
 
 ### Running Locally
 ```bash
@@ -174,9 +173,4 @@ flutter run -d windows    # For Windows Desktop
 flutter run -d chrome     # For Web Browser
 # OR
 flutter run -d android    # For Android Device / Emulator
-```
-
-### Running Unit Tests
-```bash
-flutter test
 ```
