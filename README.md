@@ -7,148 +7,84 @@
 
 **CVBuilder** is a high-performance cross-platform application developed in **Flutter**. It solves a core challenge job-seekers face: transforming raw career milestones into ATS-optimized, high-impact resumes.
 
-Unlike basic resume apps, **CVBuilder integrates an autonomous AI Career Agent**. The agent acts as an intelligent career copilot, using Google's **XYZ Formula** and semantic keyword analysis to evaluate, rewrite, and mutate resume data directly inside the application state.
+Unlike basic resume apps, **CVBuilder integrates an autonomous AI Career Agent**. The agent acts as an intelligent career copilot, using Google's **XYZ Formula** (*"Accomplished [X], as measured by [Y], by doing [Z]"*) and semantic keyword analysis to evaluate, rewrite, and mutate resume data directly inside the application state.
 
 ---
 
-## 🏗️ Architectural Pattern: MVVM (Model - View - ViewModel)
+## 🚀 Key Features
 
-This project strictly adheres to the **MVVM Architecture** to ensure clean separation of concerns, testability, and scalability:
-
-```
-+-------------------------------------------------------------------------+
-|                                  VIEW                                   |
-|   lib/views/ (HomeScreen, CvEditorScreen, CvPreviewScreen, AiAgentScreen) |
-|   lib/widgets/ (Templates, ScoreBadge, AiActionButton, SectionCard)     |
-|   • Only renders UI components.                                         |
-|   • Listens to ViewModel state via reactive listeners (Consumer/watch). |
-|   • Forwards user gestures/intents to ViewModel actions.                |
-+------------------------------------+------------------------------------+
-                                     |
-                                     v  (User Actions / State Observation)
-+------------------------------------+------------------------------------+
-|                                VIEWMODEL                                |
-|   lib/viewmodels/ (CvViewModel, AiAgentViewModel)                       |
-|   • Holds and exposes observable UI state (extends ChangeNotifier).     |
-|   • Contains presentation logic, validation, and tool execution.        |
-|   • Mediates between the View and underlying Services/Models.           |
-|   • Views NEVER directly access databases or external APIs.             |
-+------------------------------------+------------------------------------+
-                                     |
-                                     v  (Data Operations & Tool Calls)
-+------------------------------------+------------------------------------+
-|                             MODEL & SERVICES                            |
-|   lib/models/ (CvData, PersonalInfo, WorkExperience, AiAgentMessage...) |
-|   lib/services/ (AiAgentService, PdfExportService, StorageService)      |
-|   • Pure business entities, JSON serialization, and data definitions.   |
-|   • External REST communication (Gemini LLM API) & PDF rendering.       |
-+-------------------------------------------------------------------------+
-```
-
-### Layer Responsibilities
-
-1. **Model Layer (`lib/models/`)**:
-   - `cv_data.dart`: Composite resume domain entity with completeness score algorithm.
-   - `work_experience.dart`, `education.dart`, `skill.dart`, `project.dart`, `certification.dart`: Structured career entities.
-   - `ai_agent_message.dart`: Conversational messages, reasoning traces, and structured `AgentToolAction` payloads.
-
-2. **ViewModel Layer (`lib/viewmodels/`)**:
-   - `cv_viewmodel.dart`: Manages resume CRUD operations, template choices, active color palettes, and persistence orchestration via `StorageService`.
-   - `ai_agent_viewmodel.dart`: Manages AI conversational state, reasoning traces, ATS match analysis, and tool execution dispatching.
-
-3. **View Layer (`lib/views/` & `lib/widgets/`)**:
-   - `home_screen.dart`: Dashboard with completeness gauges, recent resumes, and navigation.
-   - `cv_editor_screen.dart`: Tabbed form editor with inline "AI Polish" hooks.
-   - `cv_preview_screen.dart`: Real-time interactive A4 sheet rendering and vector PDF export.
-   - `ai_agent_screen.dart`: Dedicated AI career copilot chat and ATS job-matching suite.
-   - `settings_screen.dart`: Gemini API key configuration and offline demo engine toggle.
-
----
-
-## 🧠 The AI Agent: How It Works & Architecture
-
-### 1. What makes this an "AI Agent" rather than a simple prompt?
-In Artificial Intelligence and Software Engineering, an **Agent** is defined by three continuous capabilities:
-1. **Perception**: The agent inspects the application state in `CvViewModel` (work experience, skills, education, and user prompts).
-2. **Cognitive Reasoning & Planning**: It breaks down text into structural metrics, evaluating active vs. passive voice, quantifying achievements, and checking ATS keyword density.
-3. **Autonomous Tool Execution (Function Calling)**: Rather than just printing suggestions as text, the agent outputs structured tool invocations (`AgentToolAction`) that mutate the `CvViewModel` state with one-click user consent.
-
-### 2. Supported Agent Tools & Functions
-| Tool Name | Purpose | Trigger / Action |
-|---|---|---|
-| `replace_bullet` | Replaces weak, passive bullet points with quantifiable XYZ achievements. | Inline on any experience bullet or via chat. |
-| `update_summary` | Synthesizes target job title and top 3 technical skills into an executive profile. | Summary input field or chat command. |
-| `add_skill` | Extracts demanded frameworks from job descriptions and appends them as categorized chips. | ATS scanner or conversational command. |
-| `analyze_ats` | Scans a target Job Description, computes match percentage (0–100%), and detects missing keywords. | ATS Job Matcher tab. |
-
-### 3. Dual Engine Architecture (Cloud & Offline Resilient)
-- **Live Mode**: Directly queries Google Gemini via REST API using standard HTTP headers and JSON structured mode.
-- **Offline / Fallback Mode**: Features an embedded heuristic rule engine that executes local reasoning and XYZ formatting, ensuring uninterrupted productivity without requiring an active internet connection or external API availability.
-
----
-
-## 🚀 Key Application Features
-
-1. **Structured CV Form Editor**:
+1. **Structured Resume Form Editor**:
    - Tabbed navigation across *Personal Info*, *Work Experience*, *Education*, *Skills*, and *Projects*.
-   - Inline "AI Polish" buttons beside individual achievements.
-   - Dynamic bullet point additions and drag/delete controls.
-2. **Multiple Professional Resume Templates**:
+   - Inline "AI Polish" tools beside individual achievements.
+   - Dynamic bullet point reordering, additions, and deletions.
+
+2. **Real-Time ATS Completeness Gauge**:
+   - Dynamic circular score ring rating profile completeness (0–100%) and ATS alignment.
+   - Visual feedback on missing required contact information and section gaps.
+
+3. **Multi-Format Document Ingestion**:
+   - Ingest existing resumes directly from PDF, Word DOCX, Markdown, or plain text.
+   - Heuristic entity parser extracts candidate contact details, work history, and skills automatically into form fields.
+
+4. **Conversational Career Copilot & Job Matcher**:
+   - Chat with an embedded career assistant for tailored resume feedback.
+   - Paste job descriptions to compute compatibility match scores and identify missing critical keywords.
+   - Expandable reasoning traces explaining why improvements were recommended.
+
+5. **Dual-Engine Architecture (Cloud & Offline Resilient)**:
+   - **Online Mode**: Integrates with Google Gemini Foundation models for advanced natural language career recommendations.
+   - **Offline Mode**: Built-in heuristic rule engine executes local reasoning and XYZ formatting, ensuring uninterrupted productivity without an active internet connection.
+
+6. **Multiple Professional Resume Templates**:
    - **Modern Tech**: Accent lines, bold titles, and technical skill badges.
    - **Executive Pro**: Structured two-column layout with header banner and corporate typography.
-   - **Minimalist Clean**: Scandinavian whitespace balance and subtle hairline dividers.
-3. **Dynamic Color Palettes**:
-   - Instant customization across 6 curated palettes: Royal Blue, Modern Teal, Emerald Green, Indigo Slate, Rose Crimson, and Midnight Dark.
-4. **Vector-Quality PDF Export**:
-   - Powered by the `pdf` and `printing` packages.
-   - Generates exact A4 vector PDF documents with 1-click preview, native printing, or download.
-5. **Real-time ATS & Completeness Gauges**:
-   - Visual progress rings rating resume strength and ATS alignment.
+   - **Minimalist Clean**: Balanced whitespace and subtle hairline dividers.
+
+7. **Dynamic Color Customization**:
+   - Instant customization across curated palettes: Royal Blue, Modern Teal, Emerald Green, Indigo Slate, Rose Crimson, and Midnight Dark.
+
+8. **Vector-Quality PDF Export**:
+   - Powered by the `pdf` and `printing` vector engines.
+   - Generates exact A4 vector PDF documents with selectable text streams, 1-click preview, native printing, or download.
 
 ---
 
-## 📁 Project Directory Structure (MVVM)
+## 📁 Project Directory Structure
 
 ```
 cv_builder/
 ├── lib/
-│   ├── main.dart                      # App entry point & MultiProvider initialization
-│   ├── models/                        # [M] MODEL LAYER: Domain entities & serialization
+│   ├── main.dart                      # App entry point
+│   ├── models/                        # Resume domain models & data entities
 │   │   ├── cv_data.dart               # Composite CV model & completeness score logic
 │   │   ├── personal_info.dart         # Contact & summary details
 │   │   ├── work_experience.dart       # Job positions & bullet points
 │   │   ├── education.dart             # Academic credentials & GPA
-│   │   ├── skill.dart                 # Categorized skills & proficiency ratings
+│   │   ├── skill.dart                 # Categorized skills & ratings
 │   │   ├── project.dart               # Portfolio projects & repository links
 │   │   ├── certification.dart         # Certifications & licenses
-│   │   └── ai_agent_message.dart      # Chat messages, reasoning logs & tool actions
-│   ├── viewmodels/                    # [VM] VIEWMODEL LAYER: State & Presentation Logic
+│   │   └── ai_agent_message.dart      # Chat messages & tool actions
+│   ├── viewmodels/                    # App state & business logic
 │   │   ├── cv_viewmodel.dart          # CV state management & section mutations
-│   │   └── ai_agent_viewmodel.dart    # Agent chat state, reasoning traces & tool execution
-│   ├── views/                         # [V] VIEW LAYER: Screen components
+│   │   └── ai_agent_viewmodel.dart    # AI copilot chat & job matcher state
+│   ├── views/                         # UI screens
 │   │   ├── home_screen.dart           # Dashboard with saved CVs & quick actions
-│   │   ├── cv_editor_screen.dart      # Multi-tab editor with inline AI hooks
-│   │   ├── cv_preview_screen.dart     # Live preview, template switch & PDF export
+│   │   ├── cv_editor_screen.dart      # Multi-tab form editor with inline AI tools
+│   │   ├── cv_preview_screen.dart     # Live preview & vector PDF export
 │   │   ├── ai_agent_screen.dart       # AI Career Copilot chat & ATS Job Matcher
-│   │   └── settings_screen.dart       # API key configuration & engine toggles
-│   ├── services/                      # SERVICE LAYER: External I/O and hardware
-│   │   ├── ai_agent_service.dart      # Dual Gemini / Local Agent engine
-│   │   ├── pdf_export_service.dart    # PDF generation for all templates
-│   │   └── storage_service.dart       # Local persistence
+│   │   └── settings_screen.dart       # App settings & engine configuration
+│   ├── services/                      # Services & external integrations
+│   │   ├── ai_agent_service.dart      # Gemini API & offline heuristic engine
+│   │   ├── pdf_export_service.dart    # Vector PDF rendering engine
+│   │   └── storage_service.dart       # Local persistence & session storage
 │   ├── widgets/                       # Reusable UI widgets & Templates
-│   │   ├── ai_action_button.dart      # Reusable "AI Polish" widget with modal preview
+│   │   ├── ai_action_button.dart      # AI Polish action widget
 │   │   ├── score_badge.dart           # Circular score gauge
 │   │   ├── section_card.dart          # Form section card container
-│   │   └── templates/
-│   │       ├── modern_template.dart   # Modern Tech template renderer
-│   │       ├── executive_template.dart# Executive Pro template renderer
-│   │       └── minimalist_template.dart# Minimalist Clean template renderer
-│   ├── theme/
-│   │   └── app_theme.dart             # Material 3 light and dark theme styling
-│   └── utils/
-│       ├── constants.dart             # Palettes, templates, and agent system prompts
-│       └── sample_data.dart           # Pre-configured Software Engineer profile
-└── pubspec.yaml                       # Project dependencies and asset definitions
+│   │   └── templates/                 # Document template renderers
+│   ├── theme/                         # Material 3 styling & color palettes
+│   └── utils/                         # Constants & sample data
+└── pubspec.yaml                       # Dependencies and assets configuration
 ```
 
 ---
