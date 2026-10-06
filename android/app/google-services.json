@@ -1,0 +1,34 @@
+{
+  "project_info": {
+    "project_number": "773541196171",
+    "project_id": "cv-builder-64e52",
+    "storage_bucket": "cv-builder-64e52.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:773541196171:android:e8add38e11a476cb297f8e",
+        "android_client_info": {
+          "package_name": "com.example.cv_builder"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "773541196171-g86e1o55m0306446dnnhsddd1ml93q7o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCeZq-8wAiZBZCJY8Hs9uEA9Yu84zuTXDU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
